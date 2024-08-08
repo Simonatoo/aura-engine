@@ -1,0 +1,47 @@
+# Node.js
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Build outputs
+dist/
+build/
+
+# Dependency directories
+jspm_packages/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Coverage reports
+coverage/
+
+# Miscellaneous
+*.cache
+*.tmp
+
+# Dependency directories
+bower_components/
+
+# Ignore build artifacts
+*.gz
+*.zip
+
+# Ignore compiled JavaScript and source maps
+*.js
+*.map
