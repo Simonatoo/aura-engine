@@ -1,7 +1,8 @@
 import global from "../global/global.js";
 import { State } from "../global/State.js";
+import { Vector2 } from "../math/vector.js";
 
-export class PhysicEngine {
+class PhysicEngine {
     object_list: PhysicObject[];
     gravity: { x: number, y: number };
 
@@ -23,17 +24,17 @@ export class PhysicEngine {
 }
 
 
-export class PhysicObject {
+class PhysicObject {
     position: { x: number, y: number };
     velocity: { x: number, y: number };
     aceleration: { x: number, y: number };
     mass: number;
 
-    constructor(position: { x: number, y: number }, mass = 1) {
+    constructor(position: { x: number, y: number }, mass?: number) {
         this.position = position;
         this.velocity = { x: 0, y: 0 };
         this.aceleration = { x: 0, y: 0 };
-        this.mass = mass;
+        this.mass = mass || 1;
     }
 
     applyForce(force: { x: number, y: number }) {
@@ -53,77 +54,9 @@ export class PhysicObject {
     }
 }
 
-interface objectConfig {
-    position: { x: number, y: number };
-    mass: number;
-    width: number;
-    height: number;
-    color: string;
-}
-
-export class Box extends PhysicObject {
-    position: { x: number; y: number; };
-    width: number
-    height: number
-    color: string
-
-    constructor(config: objectConfig) {
-        super(config.position, config.mass);
-        this.position = config.position;
-        this.width = config.width;
-        this.height = config.height;
-        this.color = config.color;
-    }
-
-    draw() {
-        const context = global.context;
-        if (!context) return;
-        context.fillStyle = this.color;
-        context.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-}
-
-class Render {
-    image(name:string, x:number, y:number) {
-        const context = global.context;
-        const image = global.getResource(name);
-        const obj = new PhysicObject({x,y})
-        if (!image) {
-            return console.error(`Image ${name} doesn't exist.`)
-        }
-        context?.drawImage(image, x, y);
-        return obj
-    }
-}
-
-
-class Image extends PhysicObject {
-    position: { x: number; y: number; };
-    width: number
-    height: number
-    color: string
-
-    constructor(config: objectConfig) {
-        super(config.position, config.mass);
-        this.position = config.position;
-        this.width = config.width;
-        this.height = config.height;
-        this.color = config.color;
-    }
-
-    draw(name:string, x:number, y:number) {
-        const context = global.context;
-        const image = global.getResource(name);
-
-        if (!context) return;
-        if (!image) return console.error(`Failed to load image ${name}`);
-
-        context.drawImage(image, x, y);
-    }
-}
-
-const render = new Render();
+const Physics = new PhysicEngine();
 
 export {
-    render as Render,
+    Physics,
+    PhysicObject
 }

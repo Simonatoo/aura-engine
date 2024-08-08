@@ -2,8 +2,9 @@ import { SceneManager } from "./SceneManager.js";
 import { Scene } from "../components/Scene.js";
 import { ImageCore } from "./ResourceManager.js";
 import { State } from "../global/State.js";
-import { PhysicEngine, PhysicObject, Box } from "./Physics.js";
 import global from "../global/global.js";
+import { Input } from "../system/input.manager.js";
+import { Physics } from "./Physics.js";
 
 class Pyrus {
     // Canvas
@@ -18,7 +19,6 @@ class Pyrus {
 
     // Imports
     sceneManager: SceneManager;
-    physics: PhysicEngine;
     image: ImageCore;
 
     constructor() {
@@ -28,7 +28,6 @@ class Pyrus {
         this.lastTimeStamp = 0;
         this.sceneManager = new SceneManager();
         this.image = new ImageCore();
-        this.physics = new PhysicEngine();
 
         // Canvas default setup
         this.SET_WINDOW_BG();
@@ -141,7 +140,7 @@ class Pyrus {
     }
 
     private updatePhysics(deltatime: number): void {
-        this.physics.update(deltatime);
+        Physics.update(deltatime);
     }
 
     private isEngineReady(): boolean {
@@ -157,5 +156,6 @@ export {
     Pyrus,
     Scene,
     global as Global,
+    Input    
 };
 
