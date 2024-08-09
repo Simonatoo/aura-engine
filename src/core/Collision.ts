@@ -1,4 +1,4 @@
-import { GameObject } from "./Gameobject.js";
+import { GameObject } from "./GameObject.js";
 import { PhysicObject } from "./Physics.js";
 
 class Collider2DCore {

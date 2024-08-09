@@ -1,4 +1,4 @@
-import { Component } from "../core/Gameobject.js";
+import { Component } from "../core/GameObject.js";
 import global from "../global/global.js";
 class Sprite extends Component {
     constructor(config) {

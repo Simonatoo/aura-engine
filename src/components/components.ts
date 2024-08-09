@@ -1,4 +1,4 @@
-import { Component, GameObject } from "../core/Gameobject.js";
+import { Component } from "../core/GameObject.js";
 import global from "../global/global.js";
 
 interface SpriteConfig {

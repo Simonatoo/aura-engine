@@ -5,7 +5,7 @@ import global from "../global/global.js";
 import { Input } from "../system/input.manager.js";
 import { Physics } from "./Physics.js";
 import { Collider2D } from "./Collision.js";
-class Pyrus {
+class Engine {
     constructor() {
         var _a;
         this.canvas = document.createElement("canvas");
@@ -125,4 +125,4 @@ class Pyrus {
         (_a = this.context) === null || _a === void 0 ? void 0 : _a.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
-export { Pyrus, Scene, global as Global, Input };
+export { Engine as Aura, Scene, global as Global, Input };

@@ -8,7 +8,7 @@ import { Physics } from "./Physics.js";
 import { Camera } from "./Camera.js";
 import { Collider2D } from "./Collision.js";
 
-class Pyrus {
+class Engine {
     // Canvas
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D | undefined;
@@ -169,7 +169,7 @@ class Pyrus {
 }
 
 export {
-    Pyrus,
+    Engine as Aura,
     Scene,
     global as Global,
     Input    
