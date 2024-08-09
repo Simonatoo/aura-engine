@@ -55,6 +55,7 @@ class PhysicObject {
     update(deltatime: number) {
         if (!this.gravity) return;
 
+
         this.velocity.x += this.aceleration.x * deltatime;
         this.velocity.y += this.aceleration.y * deltatime;
 

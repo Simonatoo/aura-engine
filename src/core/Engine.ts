@@ -6,6 +6,7 @@ import global from "../global/global.js";
 import { Input } from "../system/input.manager.js";
 import { Physics } from "./Physics.js";
 import { Camera } from "./Camera.js";
+import { Collider2D } from "./Collision.js";
 
 class Pyrus {
     // Canvas
@@ -141,8 +142,22 @@ class Pyrus {
     }
 
     private updatePhysics(deltatime: number): void {
-        Physics.update(deltatime);
+    Physics.update(deltatime);
+    
+    for (let i = 0; i < Physics.object_list.length; i++) {
+        for (let j = i + 1; j < Physics.object_list.length; j++) {
+            const obj1 = global.objects[i];
+            const obj2 = global.objects[j];
+
+            console.log(obj1, obj2);
+            
+            if (Collider2D.isObjectsColliding(obj1, obj2)) {
+                console.log('Is colliding');
+            }
+        }
     }
+}
+
 
     private isEngineReady(): boolean {
         return !!this.canvas && !!this.context;

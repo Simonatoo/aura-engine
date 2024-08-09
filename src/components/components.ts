@@ -8,24 +8,28 @@ interface SpriteConfig {
 }
 
 class Sprite extends Component {
-    config: SpriteConfig
+    config: SpriteConfig;
+    sprite: HTMLImageElement | undefined;
 
     constructor(config:SpriteConfig) {
         super();
         this.config = config;
+        this.sprite = global.getResource(this.config.name);
     }
 
     render(): void {
         const context: CanvasRenderingContext2D | null = global.context;
-        const sprite = global.getResource(this.config.name);
 
         if (!context) return;
-        if (!sprite) return;
+        if (!this.sprite) return;
+
+        const width = this.config.width ?? this.sprite.width;
+        const height = this.config.height ?? this.sprite.height;
 
         context.drawImage(
-            sprite,
+            this.sprite,
             this.gameobject.position.x, this.gameobject.position.y,
-            this.config.width??sprite.width, this.config.height??sprite.height);
+            this.gameobject.width + width, this.gameobject.height + height);
     }
 }
 
@@ -55,6 +59,8 @@ class Label extends Component {
         this.size = config?.size ?? 16;
         this.textAlign = config?.textAlign ?? 'left';
         this.textBaseline = config?.textBaseline ?? 'top';
+        this.gameobject.width = this.text.length + 16;
+        this.gameobject.height = this.size;
     }
 
     private applyStyle(context: CanvasRenderingContext2D): void {
