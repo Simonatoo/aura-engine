@@ -4,8 +4,8 @@ npm-debug.log
 package-lock.json
 
 # Build outputs
-dist/
-build/
+# dist/
+# build/
 
 # Dependency directories
 jspm_packages/
@@ -43,5 +43,5 @@ bower_components/
 *.zip
 
 # Ignore compiled JavaScript and source maps
-*.js
+# *.js
 *.map
