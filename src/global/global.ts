@@ -1,12 +1,16 @@
+import { Component, GameObject } from "../core/Gameobject";
+
 export class Global {
     canvas: HTMLCanvasElement | null;
     context: CanvasRenderingContext2D | null;
     resources: { [key: string]: HTMLImageElement };
+    objects: GameObject[];
 
     constructor() {
         this.canvas = null;
         this.context = null;
         this.resources = {};
+        this.objects = [];
     }
 
     setCanvas(canvas: HTMLCanvasElement): void {
@@ -16,6 +20,10 @@ export class Global {
 
     addResource(name: string, resource: HTMLImageElement): void {
         this.resources[name] = resource;
+    }
+
+    addObject(object:GameObject) {
+        this.objects.push(object);
     }
 
     getResource(name: string): HTMLImageElement | undefined {

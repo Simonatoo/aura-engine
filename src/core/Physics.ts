@@ -11,8 +11,14 @@ class PhysicEngine {
         this.object_list = [];
     }
 
-    addObject(object: PhysicObject) {
+    addObject(object: PhysicObject): void {
         this.object_list.push(object);
+    }
+
+    addObjects(objects: PhysicObject[]): void {
+        objects.forEach(obj => {
+            this.object_list.push(obj);
+        })
     }
 
     update(deltatime: number) {
@@ -28,6 +34,7 @@ class PhysicObject {
     position: { x: number, y: number };
     velocity: { x: number, y: number };
     aceleration: { x: number, y: number };
+    gravity: boolean;
     mass: number;
 
     constructor(position: { x: number, y: number }, mass?: number) {
@@ -35,14 +42,19 @@ class PhysicObject {
         this.velocity = { x: 0, y: 0 };
         this.aceleration = { x: 0, y: 0 };
         this.mass = mass || 1;
+        this.gravity = true;
     }
 
     applyForce(force: { x: number, y: number }) {
+        if (!this.gravity) return;
+        
         this.aceleration.x += force.x / this.mass;
         this.aceleration.y += force.y / this.mass;
     }
 
     update(deltatime: number) {
+        if (!this.gravity) return;
+
         this.velocity.x += this.aceleration.x * deltatime;
         this.velocity.y += this.aceleration.y * deltatime;
 

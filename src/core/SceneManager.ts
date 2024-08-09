@@ -30,11 +30,12 @@ export class SceneManager {
         const newScene = this.scenes.get(name)
         this.currentScene = newScene
 
-        if (this.currentScene)
-            this.currentScene.start()
-
         // DEBUG
         console.log("Scene was changed.")
+
+        if (this.currentScene) {
+            this.currentScene.start()
+        }
     }
 
     /**

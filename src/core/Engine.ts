@@ -5,6 +5,7 @@ import { State } from "../global/State.js";
 import global from "../global/global.js";
 import { Input } from "../system/input.manager.js";
 import { Physics } from "./Physics.js";
+import { Camera } from "./Camera.js";
 
 class Pyrus {
     // Canvas

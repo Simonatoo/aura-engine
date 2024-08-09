@@ -1,10 +1,36 @@
-import { PhysicObject } from "../core/Physics.js";
+import { Component, GameObject } from "../core/Gameobject.js";
 import global from "../global/global.js";
-import { Vector2 } from "../math/vector.js";
+
+interface SpriteConfig {
+    name: string
+    width?: number
+    height?: number
+}
+
+class Sprite extends Component {
+    config: SpriteConfig
+
+    constructor(config:SpriteConfig) {
+        super();
+        this.config = config;
+    }
+
+    render(): void {
+        const context: CanvasRenderingContext2D | null = global.context;
+        const sprite = global.getResource(this.config.name);
+
+        if (!context) return;
+        if (!sprite) return;
+
+        context.drawImage(
+            sprite,
+            this.gameobject.position.x, this.gameobject.position.y,
+            this.config.width??sprite.width, this.config.height??sprite.height);
+    }
+}
 
 interface LabelConfig {
     text: string;
-    position: Vector2;
     font?: string;
     color?: string;
     size?: number;
@@ -12,7 +38,7 @@ interface LabelConfig {
     textBaseline?: CanvasTextBaseline;
 }
 
-class Label extends PhysicObject {
+class Label extends Component {
     text: string;
     font: string;
     color: string;
@@ -20,8 +46,8 @@ class Label extends PhysicObject {
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;
 
-    constructor(config: LabelConfig = { text: 'null', position: new Vector2(0, 0) }) {
-        super(config.position);
+    constructor(config: LabelConfig = { text: 'null'}) {
+        super();
 
         this.text = config.text;
         this.font = config?.font ?? 'Arial';
@@ -43,32 +69,11 @@ class Label extends PhysicObject {
         if (!context) return;
 
         this.applyStyle(context);
-        context.fillText(this.text, this.position.x, this.position.y);
-    }
-}
-
-class Sprite extends PhysicObject {
-    name: string;
-    position: Vector2;
-
-    constructor(name: string, position: Vector2) {
-        super((position || { x: 0, y: 0 }));
-        this.name = name;
-        this.position = position || { x: 0, y: 0 };
-    }
-
-    /** Use this function to render it on the current scene. */
-    public render() {
-        const sprite = global.getResource(this.name);
-        if (!sprite) {
-            console.error(`Sprite ${this.name} doesn't exist.`);
-            return;
-        }
-        global.context?.drawImage(sprite, this.position.x, this.position.y);
+        context.fillText(this.text, this.gameobject.position.x, this.gameobject.position.y);
     }
 }
 
 export {
+    Sprite,
     Label,
-    Sprite
 }
