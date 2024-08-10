@@ -1,7 +1,3 @@
-import global from "../global/global.js";
-import { State } from "../global/State.js";
-import { Vector2 } from "../math/vector.js";
-
 class PhysicEngine {
     object_list: PhysicObject[];
     gravity: { x: number, y: number };

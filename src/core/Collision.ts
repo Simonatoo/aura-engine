@@ -1,5 +1,5 @@
-import { GameObject } from "./GameObject.js";
-import { PhysicObject } from "./Physics.js";
+import { GameObject } from "./GameObject";
+import { PhysicObject } from "./Physics";
 
 class Collider2DCore {
     isObjectsNotColliding(obj1: GameObject, obj2: GameObject): boolean {

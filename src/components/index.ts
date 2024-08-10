@@ -1,5 +1,5 @@
-import { Component } from "../core/GameObject.js";
-import global from "../global/global.js";
+import { Component } from "../core/GameObject";
+import global from "../global/global";
 
 interface SpriteConfig {
     name: string
@@ -18,7 +18,8 @@ class Sprite extends Component {
     }
 
     render(): void {
-        const context: CanvasRenderingContext2D | null = global.context;
+        const canvas = document.body.querySelector('canvas')
+        const context = canvas?.getContext("2d");
 
         if (!context) return;
         if (!this.sprite) return;
@@ -34,7 +35,7 @@ class Sprite extends Component {
 }
 
 interface LabelConfig {
-    text: string;
+    text?: string;
     font?: string;
     color?: string;
     size?: number;
@@ -50,17 +51,15 @@ class Label extends Component {
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;
 
-    constructor(config: LabelConfig = { text: 'null'}) {
+    constructor(config: LabelConfig ) {
         super();
 
-        this.text = config.text;
+        this.text = config.text ?? 'null';
         this.font = config?.font ?? 'Arial';
         this.color = config?.color ?? 'black';
         this.size = config?.size ?? 16;
         this.textAlign = config?.textAlign ?? 'left';
         this.textBaseline = config?.textBaseline ?? 'top';
-        this.gameobject.width = this.text.length + 16;
-        this.gameobject.height = this.size;
     }
 
     private applyStyle(context: CanvasRenderingContext2D): void {
@@ -71,8 +70,11 @@ class Label extends Component {
     }
 
     render(): void {
-        const context = global.context;
+        const context = document.body.querySelector('canvas')?.getContext("2d");
         if (!context) return;
+
+        this.gameobject.width = this.text.length + 16;
+        this.gameobject.height = this.size;
 
         this.applyStyle(context);
         context.fillText(this.text, this.gameobject.position.x, this.gameobject.position.y);

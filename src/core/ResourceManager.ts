@@ -1,7 +1,7 @@
-import global from "../global/global.js";
-import { State } from "../global/State.js";
+import global from "../global/global";
+import { State } from "../global/State";
 
-export class ImageCore {
+class ResourceManager {
     crude_images: Map<string, string>;
     rendered_images: Map<string, HTMLImageElement>;
 
@@ -33,4 +33,10 @@ export class ImageCore {
 
         return Promise.all(promises).then(() => undefined);
     }
+}
+
+const resources = new ResourceManager();
+
+export {
+    resources as ResourceManager,
 }

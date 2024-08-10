@@ -1,5 +1,5 @@
-import global from "../global/global.js";
-import { Vector2 } from "../math/vector.js";
+import global from "../global/global";
+import { Vector2 } from "../math/vector";
 
 class Camera {
     context: CanvasRenderingContext2D | null;

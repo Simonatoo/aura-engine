@@ -1,6 +1,6 @@
-import { Scene } from "../components/Scene.js";
+import { Scene } from "../components/Scene";
 
-export class SceneManager {
+class SceneManager {
     scenes: any
     currentScene: Scene | null
 
@@ -26,7 +26,7 @@ export class SceneManager {
         this.currentScene.update(timestamp)
     }
 
-    public switchTo(name:string): void {
+    public switchTo(name: string): void {
         const newScene = this.scenes.get(name)
         this.currentScene = newScene
 
@@ -46,3 +46,7 @@ export class SceneManager {
         return this.scenes
     }
 }
+
+const sceneManager = new SceneManager();
+
+export { sceneManager as SceneManager };

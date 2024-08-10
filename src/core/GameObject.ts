@@ -1,6 +1,6 @@
-import global from "../global/global.js";
-import { Vector2 } from "../math/vector.js";
-import { PhysicObject, Physics } from "./Physics.js";
+import global from "../global/global";
+import { Vector2 } from "../math/vector";
+import { PhysicObject, Physics } from "./Physics";
 
 
 class GameObject extends PhysicObject {
@@ -35,7 +35,6 @@ class GameObject extends PhysicObject {
 
 abstract class Component {
     public gameobject!: GameObject;
-    // abstract update(deltatime:number):void;
     abstract render():void;
 }
 
