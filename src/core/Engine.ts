@@ -4,6 +4,7 @@ import { ResourceManager } from "./ResourceManager";
 import { Nodes } from "../nodes";
 import { PhysicManager } from "./Physics";
 import { Collider } from "./Collision";
+import { GameObject } from "./GameObject";
 
 interface CanvasConfig {
     width?: number;
@@ -85,27 +86,39 @@ class Engine {
 
     private updatePhysics(deltaTime: number): void {
         PhysicManager.update(deltaTime);
-    
-    for (let i = 0; i < PhysicManager.objects.length; i++) {
-        for (let j = i + 1; j < PhysicManager.objects.length; j++) {
-            const obj1 = PhysicManager.objects[i];
-            const obj2 = PhysicManager.objects[j];
-            
-            if (Collider.isNodesColliding(obj1, obj2)) {
-                if (Collider.isAbove(obj1, obj2)) {
-                    obj1.physics.velocity.y *= -obj1.physics.bounciness;
-                } else {
-                    obj2.physics.velocity.y *= -obj2.physics.bounciness;
+
+        for (let i = 0; i < PhysicManager.objects.length; i++) {
+            for (let j = i + 1; j < PhysicManager.objects.length; j++) {
+                const obj1 = PhysicManager.objects[i];
+                const obj2 = PhysicManager.objects[j];
+
+                if(obj1.physics.isTrigger || obj2.physics.isTrigger) {
+                    return;
                 }
-                
-                Collider.resolveCollision(obj1, obj2);
-                
-                const combinedFriction = (obj1.physics.friction + obj2.physics.friction) / 2;
-                obj1.physics.velocity.x *= (1 - combinedFriction * 0.1);
-                obj2.physics.velocity.x *= (1 - combinedFriction * 0.1);
+
+                if (Collider.isNodesColliding(obj1, obj2)) {
+                    if (Collider.isAbove(obj1, obj2)) {
+                        obj1.physics.velocity.y *= -obj1.physics.bounciness;
+                        obj1.physics.velocity.x *= obj1.physics.bounciness;
+                        obj2.physics.velocity.x *= obj2.physics.bounciness;
+                    } else {
+                        obj2.physics.velocity.y *= -obj2.physics.bounciness;
+                        obj1.physics.velocity.x *= -obj1.physics.bounciness;
+                        obj2.physics.velocity.x *= -obj2.physics.bounciness;
+                    }
+
+
+                    Collider.resolveCollision(obj1, obj2);
+
+                    const combinedFriction = (obj1.physics.friction + obj2.physics.friction) / 2;
+                    obj1.physics.velocity.x *= (1 - combinedFriction * 0.1);
+                    obj2.physics.velocity.x *= (1 - combinedFriction * 0.1);
+                }
             }
         }
     }
+    checkColliding(obj1:GameObject, obj2:GameObject): boolean {
+        return Collider.isColliding(obj1, obj2);
     }
 }
 

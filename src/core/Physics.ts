@@ -29,10 +29,12 @@ export class Physics {
     velocity: Vector3;
     bounciness: number;
     friction: number;
-    static: boolean;
+    isStatic: boolean;
+    isTrigger: boolean;
 
     constructor() {
-        this.static = false;
+        this.isStatic = false;
+        this.isTrigger = false;
         this.mass = 1;
         this.bounciness = 0.1;
         this.friction = 1;
@@ -41,13 +43,13 @@ export class Physics {
     }
 
     applyForce(force:Vector3) {
-        if (this.static) return;
+        if (this.isStatic) return;
         this.acceleration.x += force.x / this.mass;
         this.acceleration.y += force.y / this.mass;
     }
 
     update(deltatime:number) {
-        if(this.static) return;
+        if(this.isStatic) return;
         this.velocity.x += this.acceleration.x * deltatime;
         this.velocity.y += this.acceleration.y * deltatime;
         // Reset acceleration

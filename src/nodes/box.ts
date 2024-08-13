@@ -12,6 +12,7 @@ export class Box extends GameObject {
     constructor(config: BoxConfig) {
         super();
         this.config = config;
+        this.update(0);
     }
 
     render(): void {

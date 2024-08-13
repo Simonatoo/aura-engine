@@ -44,6 +44,9 @@ class Colliders {
     isAbove(obj1: GameObject, obj2: GameObject) {
         return obj1.transform.position.y < obj2.transform.position.y;
     }
+    isColliding(obj1: GameObject, obj2: GameObject): boolean {
+        return Collider.isNodesColliding(obj1, obj2);
+    }
 }
 
 export const Collider = new Colliders();
