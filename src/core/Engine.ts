@@ -1,10 +1,9 @@
-import global from "../global/global";
 import { SceneManager } from "./SceneManager";
 import { Scene } from "../components/Scene";
 import { ResourceManager } from "./ResourceManager";
-import { Input } from "../system/input.manager";
-import { Physics } from "./Physics";
-import { Collider2D } from "./Collision";
+import { Nodes } from "../nodes";
+import { PhysicManager } from "./Physics";
+import { Collider } from "./Collision";
 
 interface CanvasConfig {
     width?: number;
@@ -17,19 +16,22 @@ interface CanvasConfig {
 
 class Engine {
     private lastTimeStamp: number;
+    public node: Nodes;
 
     constructor() {
+        this.node = new Nodes();
         this.lastTimeStamp = 0;
         this.setupListeners();
         this.gameLoop = this.gameLoop.bind(this);
     }
 
-    static start(config: CanvasConfig = {}) {
+    static start(config: CanvasConfig = {}): Engine {
         const engine = new Engine();
         engine.initializeGame(config);
+        return engine;
     }
 
-    private initializeGame(config: CanvasConfig): void {
+    private async initializeGame(config: CanvasConfig): Promise<void> {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext("2d");
 
@@ -39,23 +41,13 @@ class Engine {
 
         document.body.appendChild(canvas);
 
-        if (!config.initialScene) {
-            return console.error('You need to set an initial scene before rendering the canvas.');
+        if (config.resources) {
+            await this.loadResources(config.resources);
         }
 
         this.setupScenes(config);
-        
-        if (config.resources) {
-            this.loadResources(config.resources).then(() => {
-                SceneManager.switchTo(config.initialScene ?? '');
-                requestAnimationFrame(this.gameLoop);
-            }).catch((err) => {
-                console.error('Failed to load resources.', err);
-            });
-        } else {
-            SceneManager.switchTo(config.initialScene ?? '');
-            requestAnimationFrame(this.gameLoop);
-        }
+        requestAnimationFrame(this.gameLoop);
+        return SceneManager.switchTo(config.initialScene ?? 'null');
     }
 
     private setupScenes(config: CanvasConfig): void {
@@ -88,28 +80,37 @@ class Engine {
         const canvas = document.body.querySelector('canvas');
         if (!canvas) return;
         const context = canvas?.getContext("2d");
-        context?.clearRect(0,0, canvas?.width, canvas?.height);
+        context?.clearRect(0, 0, canvas?.width, canvas?.height);
     }
 
     private updatePhysics(deltaTime: number): void {
-        Physics.update(deltaTime);
-
-        for (let i = 0; i < Physics.object_list.length; i++) {
-            for (let j = i + 1; j < Physics.object_list.length; j++) {
-                const obj1 = global.objects[i];
-                const obj2 = global.objects[j];
-
-                if (Collider2D.isObjectsColliding(obj1, obj2)) {
-                    console.log('Collision detected:', obj1, obj2);
+        PhysicManager.update(deltaTime);
+    
+    for (let i = 0; i < PhysicManager.objects.length; i++) {
+        for (let j = i + 1; j < PhysicManager.objects.length; j++) {
+            const obj1 = PhysicManager.objects[i];
+            const obj2 = PhysicManager.objects[j];
+            
+            if (Collider.isNodesColliding(obj1, obj2)) {
+                if (Collider.isAbove(obj1, obj2)) {
+                    obj1.physics.velocity.y *= -obj1.physics.bounciness;
+                } else {
+                    obj2.physics.velocity.y *= -obj2.physics.bounciness;
                 }
+                
+                Collider.resolveCollision(obj1, obj2);
+                
+                const combinedFriction = (obj1.physics.friction + obj2.physics.friction) / 2;
+                obj1.physics.velocity.x *= (1 - combinedFriction * 0.1);
+                obj2.physics.velocity.x *= (1 - combinedFriction * 0.1);
             }
         }
+    }
     }
 }
 
 export {
     Engine as Aura,
     Scene,
-    global as Global,
 };
 

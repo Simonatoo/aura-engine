@@ -1,7 +1,7 @@
-export class Scene {
+export interface Scene {
     /**
      * Preload load scene.
      */
-    start(): void {}
-    update(deltatime:number): void {}
+    start(): void 
+    update(deltatime:number): void 
 }

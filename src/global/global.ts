@@ -1,4 +1,4 @@
-import { Component, GameObject } from "../core/GameObject";
+import { GameObject } from "../core/GameObject";
 
 export class Global {
     canvas: HTMLCanvasElement | null;

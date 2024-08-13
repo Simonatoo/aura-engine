@@ -1,44 +1,24 @@
-import global from "../global/global";
-import { Vector2 } from "../math/vector";
-import { PhysicObject, Physics } from "./Physics";
+import { Vector3 } from "../math/Vector3";
+import { Physics } from "./Physics";
 
+export abstract class GameObject {
+    public transform!: Transform;
+    public physics: Physics;
+    constructor() {
+        this.transform = new Transform();
+        this.physics = new Physics();
+    }
+    abstract render(): void;
+    abstract update(deltatime:number): void;
+}
 
-class GameObject extends PhysicObject {
-    position: Vector2;
+class Transform {
+    position: Vector3;
     width: number
     height: number
-    private components: Component[];
-
     constructor() {
-        let initial_position = new Vector2(0,0);
-        super(initial_position);
-        this.position = initial_position;
-        this.width! = 0;
-        this.height! = 0;
-        this.components = [];
-        global.addObject(this);
+        this.position = Vector3.zero();
+        this.width = 0;
+        this.height = 0;
     }
-
-    render() {
-        this.components.forEach(comp => comp.render());
-    }
-
-    public getComponent<T extends Component>(componentClass: new () => T | undefined) {
-        return this.components.find(c => c instanceof componentClass);
-    }
-
-    addComponent(component:Component) {
-        component.gameobject = this;
-        this.components.push(component);
-    }
-}
-
-abstract class Component {
-    public gameobject!: GameObject;
-    abstract render():void;
-}
-
-export {
-    Component,
-    GameObject
 }

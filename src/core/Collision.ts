@@ -1,24 +1,49 @@
-import { GameObject } from "./GameObject";
-import { PhysicObject } from "./Physics";
+import { Vector3 } from "../math/Vector3"
+import { GameObject } from "./GameObject"
 
-class Collider2DCore {
-    isObjectsNotColliding(obj1: GameObject, obj2: GameObject): boolean {
-        const notCollidingX = obj1.position.x + obj1.width < obj2.position.x ||
-                              obj2.position.x + obj2.width < obj1.position.x;
-                              
-        const notCollidingY = obj1.position.y + obj1.height < obj2.position.y ||
-                              obj2.position.y + obj2.height < obj1.position.y;
-
-        return notCollidingX || notCollidingY;
+class Colliders {
+    isNotNodesColliding(obj1: GameObject, obj2: GameObject) {
+        return obj1.transform.position.x + obj1.transform.width < obj2.transform.position.x ||
+            obj2.transform.position.x + obj2.transform.width < obj1.transform.position.x ||
+            obj1.transform.position.y + obj1.transform.height < obj2.transform.position.y ||
+            obj2.transform.position.y + obj2.transform.height < obj1.transform.position.y
     }
 
-    isObjectsColliding(obj1: GameObject, obj2: GameObject): boolean {
-        return !this.isObjectsNotColliding(obj1, obj2);
+    isNodesColliding(obj1:GameObject, obj2:GameObject) {
+        return !this.isNotNodesColliding(obj1, obj2);
+    }
+
+    resolveCollision(obj1: GameObject, obj2: GameObject) {
+        const pos1 = obj1.transform.position;
+        const pos2 = obj2.transform.position;
+
+        const width1 = obj1.transform.width;
+        const height1 = obj1.transform.height;
+        const width2 = obj2.transform.width;
+        const height2 = obj2.transform.height;
+
+        const overlapX = Math.min(pos1.x + width1 - pos2.x, pos2.x + width2 - pos1.x);
+        const overlapY = Math.min(pos1.y + height1 - pos2.y, pos2.y + height2 - pos1.y);
+
+        if (overlapX < overlapY) {
+            // Resolve collision on X axis
+            if (pos1.x < pos2.x) {
+                pos1.x -= overlapX;
+            } else {
+                pos1.x += overlapX;
+            }
+        } else {
+            // Resolve collision on Y axis
+            if (pos1.y < pos2.y) {
+                pos1.y -= overlapY;
+            } else {
+                pos1.y += overlapY;
+            }
+        }
+    }
+    isAbove(obj1: GameObject, obj2: GameObject) {
+        return obj1.transform.position.y < obj2.transform.position.y;
     }
 }
 
-const Collider2D = new Collider2DCore();
-
-export { 
-    Collider2D 
-};
+export const Collider = new Colliders();

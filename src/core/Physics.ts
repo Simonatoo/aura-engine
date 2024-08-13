@@ -1,71 +1,56 @@
-class PhysicEngine {
-    object_list: PhysicObject[];
-    gravity: { x: number, y: number };
+import {Vector3} from '../math/Vector3';
+import { GameObject } from './GameObject';
 
+class PhysicManagerCore {
+    objects: GameObject[];
+    gravity: Vector3;
     constructor() {
-        this.gravity = { x: 0, y: 9.18 };
-        this.object_list = [];
+        this.objects = [];
+        this.gravity = new Vector3(0, 9.81, 0);
     }
 
-    addObject(object: PhysicObject): void {
-        this.object_list.push(object);
+    addObject(object:GameObject): void {
+        this.objects.push(object);
     }
 
-    addObjects(objects: PhysicObject[]): void {
-        objects.forEach(obj => {
-            this.object_list.push(obj);
-        })
-    }
-
-    update(deltatime: number) {
-        this.object_list.forEach((obj) => {
-            obj.applyForce(this.gravity);
+    update(deltatime:number) {
+        this.objects.forEach(obj => {
+            obj.physics.applyForce(this.gravity);
+            obj.physics.update(deltatime);
             obj.update(deltatime);
         })
     }
 }
+export const PhysicManager = new PhysicManagerCore();
 
-
-class PhysicObject {
-    position: { x: number, y: number };
-    velocity: { x: number, y: number };
-    aceleration: { x: number, y: number };
-    gravity: boolean;
+export class Physics {
     mass: number;
+    acceleration: Vector3;
+    velocity: Vector3;
+    bounciness: number;
+    friction: number;
+    static: boolean;
 
-    constructor(position: { x: number, y: number }, mass?: number) {
-        this.position = position;
-        this.velocity = { x: 0, y: 0 };
-        this.aceleration = { x: 0, y: 0 };
-        this.mass = mass || 1;
-        this.gravity = true;
+    constructor() {
+        this.static = false;
+        this.mass = 1;
+        this.bounciness = 0.1;
+        this.friction = 1;
+        this.acceleration = Vector3.zero();
+        this.velocity = Vector3.zero();
     }
 
-    applyForce(force: { x: number, y: number }) {
-        if (!this.gravity) return;
-        
-        this.aceleration.x += force.x / this.mass;
-        this.aceleration.y += force.y / this.mass;
+    applyForce(force:Vector3) {
+        if (this.static) return;
+        this.acceleration.x += force.x / this.mass;
+        this.acceleration.y += force.y / this.mass;
     }
 
-    update(deltatime: number) {
-        if (!this.gravity) return;
-
-
-        this.velocity.x += this.aceleration.x * deltatime;
-        this.velocity.y += this.aceleration.y * deltatime;
-
-        this.position.x += this.velocity.x * deltatime;
-        this.position.y += this.velocity.y * deltatime;
-
-        this.aceleration.x = 0;
-        this.aceleration.y = 0;
+    update(deltatime:number) {
+        if(this.static) return;
+        this.velocity.x += this.acceleration.x * deltatime;
+        this.velocity.y += this.acceleration.y * deltatime;
+        // Reset acceleration
+        this.acceleration = Vector3.zero(); 
     }
-}
-
-const Physics = new PhysicEngine();
-
-export {
-    Physics,
-    PhysicObject
 }

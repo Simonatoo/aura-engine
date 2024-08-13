@@ -2,7 +2,8 @@
   "name": "aura-engine",
   "version": "0.0.2",
   "scripts": {
-    "start": "npx http-server"
+    "start": "npx http-server",
+    "dev": "npx webpack serve --config webpack.config.js"
   },
   "keywords": [],
   "author": "",
